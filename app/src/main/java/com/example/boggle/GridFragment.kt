@@ -33,6 +33,7 @@ class GridFragment: Fragment() {
 
     private val clickedPositions = mutableListOf<Pair<Int, Int>>()
     private val clickedLetters = mutableListOf<String>()
+    val clickedButtonIds = mutableListOf<Int>()
     private lateinit var gridLayout: GridLayout
 
 
@@ -68,6 +69,8 @@ class GridFragment: Fragment() {
 
                             clickedLetters.add(letter)
                         }
+
+                        clickedButtonIds.add(id)
                         binding.letterView.text = clickedLetters.joinToString(separator = "")
                     }
                 }
@@ -87,7 +90,13 @@ class GridFragment: Fragment() {
             if (clickedLetters.isNotEmpty()) {
                 clickedLetters.removeAt(clickedLetters.size - 1)
                 clickedPositions.removeAt(clickedPositions.size - 1)
+
+                val lastButtonId = clickedButtonIds.removeAt(clickedButtonIds.size - 1)
+
                 binding.letterView.text = clickedLetters.joinToString(separator = "")
+
+                val lastClickedButton = gridLayout.findViewById<Button>(lastButtonId)
+                lastClickedButton?.isEnabled = true
             }
         }
     }
