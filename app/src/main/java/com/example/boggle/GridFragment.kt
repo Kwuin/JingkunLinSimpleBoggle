@@ -68,6 +68,7 @@ class GridFragment: Fragment() {
 
                             clickedLetters.add(letter)
                         }
+                        binding.letterView.text = clickedLetters.joinToString(separator = "")
                     }
                 }
 
@@ -83,51 +84,6 @@ class GridFragment: Fragment() {
         }
     }
 
-
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun newGrid() {
-        val alphabet = ('A'..'Z').toList()
-
-        for (row in 0 until 4) {
-            for (col in 0 until 4) {
-                val button = Button(requireContext()).apply {
-                    val letter = alphabet[Random.nextInt(alphabet.size)].toString()
-                    text = letter
-                    layoutParams = GridLayout.LayoutParams().apply {
-                        width = GridLayout.LayoutParams.WRAP_CONTENT
-                        height = GridLayout.LayoutParams.WRAP_CONTENT
-                        setMargins(8, 8, 8, 8)
-                    }
-
-
-                    setOnClickListener {
-                        val position = Pair(row, col)
-                        if (isAdjacent(position) || clickedPositions.isEmpty()) {
-                            isEnabled = false
-                            clickedPositions.add(position)
-                            clickedLetters.add(letter)
-                        }
-
-                        GlobalScope.launch {
-                            // Background work
-                            withContext(Dispatchers.Main) {
-                                // Update UI here
-                                binding.letterView.text = clickedLetters.joinToString(separator = "")
-                            }
-                        }
-                    }
-                }
-                button.tag = "Button$row$col"
-                gridLayout.addView(button)
-            }
-        }
-        binding.undoButton.setOnClickListener {
-            clickedLetters.removeAt(clickedLetters.size - 1)
-        }
-        binding.submitButton.setOnClickListener {
-
-        }
-    }
 
     private fun isAdjacent(position: Pair<Int, Int>): Boolean {
 
