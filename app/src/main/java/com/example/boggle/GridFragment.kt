@@ -82,6 +82,14 @@ class GridFragment: Fragment() {
                 gridLayout.addView(button)
             }
         }
+
+        binding.undoButton.setOnClickListener {
+            if (clickedLetters.isNotEmpty()) {
+                clickedLetters.removeAt(clickedLetters.size - 1)
+                clickedPositions.removeAt(clickedPositions.size - 1)
+                binding.letterView.text = clickedLetters.joinToString(separator = "")
+            }
+        }
     }
 
 
