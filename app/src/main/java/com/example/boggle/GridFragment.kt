@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import kotlin.random.Random
 
 
@@ -36,6 +37,8 @@ class GridFragment: Fragment() {
     val clickedButtonIds = mutableListOf<Int>()
     private lateinit var gridLayout: GridLayout
 
+    private lateinit var dictionaryWords: Set<String>
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,14 +54,16 @@ class GridFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         gridLayout = binding.buttonsGrid
 
+        dictionaryWords = readDictionaryFile()
+
         val alphabet = ('A'..'Z').toList()
+
 
         for (row in 0 until 4) {
             for (col in 0 until 4) {
                 val button = Button(requireContext()).apply {
                     val letter = alphabet[Random.nextInt(alphabet.size)].toString()
                     text = letter
-                    // Set unique IDs if needed, for example, for saving state or referencing
                     id = View.generateViewId()
 
                     setOnClickListener {
@@ -66,11 +71,10 @@ class GridFragment: Fragment() {
                         if ( clickedPositions.isEmpty() || isAdjacent(position)) {
                             isEnabled = false
                             clickedPositions.add(position)
-
                             clickedLetters.add(letter)
+                            clickedButtonIds.add(id)
                         }
 
-                        clickedButtonIds.add(id)
                         binding.letterView.text = clickedLetters.joinToString(separator = "")
                     }
                 }
@@ -99,6 +103,10 @@ class GridFragment: Fragment() {
                 lastClickedButton?.isEnabled = true
             }
         }
+
+        binding.submitButton.setOnClickListener{
+
+        }
     }
 
 
@@ -113,4 +121,21 @@ class GridFragment: Fragment() {
         }
         return false
     }
+
+    private fun readDictionaryFile(): Set<String> {
+        val dictionary = mutableSetOf<String>()
+
+        try {
+            context?.assets?.open("words.txt")?.bufferedReader().use { reader ->
+                reader?.forEachLine { line ->
+                    dictionary.add(line.trim().toUpperCase())
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return dictionary
+    }
+
 }
