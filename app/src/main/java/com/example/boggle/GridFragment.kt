@@ -1,6 +1,7 @@
 package com.example.boggle
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.boggle.databinding.FragmentGridBinding
 import com.google.android.material.tabs.TabLayout.TabGravity
@@ -54,7 +56,7 @@ class GridFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         gridLayout = binding.buttonsGrid
 
-        dictionaryWords = readDictionaryFile()
+        //dictionaryWords = readDictionaryFile()
 
         val alphabet = ('A'..'Z').toList()
 
@@ -90,22 +92,28 @@ class GridFragment: Fragment() {
             }
         }
 
-        binding.undoButton.setOnClickListener {
+        binding.clearButton.setOnClickListener {
             if (clickedLetters.isNotEmpty()) {
-                clickedLetters.removeAt(clickedLetters.size - 1)
-                clickedPositions.removeAt(clickedPositions.size - 1)
+                clickedLetters.clear()
+                clickedPositions.clear()
+                binding.letterView.text = ""
 
-                val lastButtonId = clickedButtonIds.removeAt(clickedButtonIds.size - 1)
-
-                binding.letterView.text = clickedLetters.joinToString(separator = "")
-
-                val lastClickedButton = gridLayout.findViewById<Button>(lastButtonId)
-                lastClickedButton?.isEnabled = true
+                clickedButtonIds.forEach { id ->
+                    //val lastButtonId = clickedButtonIds.removeAt(clickedButtonIds.size - 1)
+                    val lastClickedButton = gridLayout.findViewById<Button>(id)
+                    lastClickedButton?.isEnabled = true
+                }
+                clickedButtonIds.clear()
             }
         }
 
         binding.submitButton.setOnClickListener{
-
+            val wordsSet = loadWordsIntoSet(requireContext(), "words.txt")
+            if (binding.letterView.text.toString() in wordsSet){
+                Toast.makeText(requireContext(), "Valid", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), "Wrong", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -122,20 +130,37 @@ class GridFragment: Fragment() {
         return false
     }
 
-    private fun readDictionaryFile(): Set<String> {
-        val dictionary = mutableSetOf<String>()
+//    private fun readDictionaryFile(): Set<String> {
+//        val dictionary = mutableSetOf<String>()
+//
+//        try {
+//            context?.assets?.open("words.txt")?.bufferedReader().use { reader ->
+//                reader?.forEachLine { line ->
+//                    dictionary.add(line.trim().toUpperCase())
+//                }
+//            }
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
+//
+//        return dictionary
+//    }
+
+    fun loadWordsIntoSet(context: Context, fileName: String): Set<String> {
+        val words = mutableSetOf<String>()
 
         try {
-            context?.assets?.open("words.txt")?.bufferedReader().use { reader ->
-                reader?.forEachLine { line ->
-                    dictionary.add(line.trim().toUpperCase())
+            context.assets.open(fileName).bufferedReader().useLines { lines ->
+                lines.forEach { line ->
+                    words.add(line.trim()) // Add each line to the set, trimming whitespace
                 }
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            e.printStackTrace() // Handle the exception appropriately
         }
 
-        return dictionary
+        return words
     }
+
 
 }

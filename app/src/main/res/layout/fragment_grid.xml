@@ -35,16 +35,16 @@ android:layout_height="wrap_content"
 android:text="Submit"
 app:layout_constraintTop_toBottomOf="@id/buttonsGrid"
 app:layout_constraintLeft_toLeftOf="parent"
-app:layout_constraintRight_toLeftOf="@id/undoButton"
+app:layout_constraintRight_toLeftOf="@id/clearButton"
     app:layout_constraintBottom_toBottomOf="parent"
 app:layout_constraintHorizontal_weight="1"/>
 
-    <!-- Undo Button -->
+    <!-- clear Button -->
 <Button
-android:id="@+id/undoButton"
+android:id="@+id/clearButton"
 android:layout_width="0dp"
 android:layout_height="wrap_content"
-android:text="Undo"
+android:text="Clear"
 app:layout_constraintTop_toBottomOf="@id/buttonsGrid"
 app:layout_constraintLeft_toRightOf="@id/submitButton"
 app:layout_constraintRight_toRightOf="parent"
