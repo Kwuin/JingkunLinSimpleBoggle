@@ -36,8 +36,11 @@ class GridFragment: Fragment() {
 
     private val clickedPositions = mutableListOf<Pair<Int, Int>>()
     private val clickedLetters = mutableListOf<String>()
+    private var current_score = 0
+    private var submitted_words = mutableSetOf<String>()
     val clickedButtonIds = mutableListOf<Int>()
     private lateinit var gridLayout: GridLayout
+
 
     private lateinit var dictionaryWords: Set<String>
 
@@ -109,10 +112,19 @@ class GridFragment: Fragment() {
 
         binding.submitButton.setOnClickListener{
             val wordsSet = loadWordsIntoSet(requireContext(), "words.txt")
-            if (binding.letterView.text.toString() in wordsSet){
-                Toast.makeText(requireContext(), "Valid", Toast.LENGTH_SHORT).show()
+            val wordString = binding.letterView.text.toString().lowercase()
+
+            if (wordString in wordsSet){
+                if (wordString in submitted_words){
+                    Toast.makeText(requireContext(), "You have submitted this before! - 10", Toast.LENGTH_SHORT).show()
+                    current_score -= 10
+                }
+                val gain_score = score(wordString)
+                current_score += gain_score
+                Toast.makeText(requireContext(), "Correct, you get$gain_score",  Toast.LENGTH_SHORT).show()
             }else{
-                Toast.makeText(requireContext(), "Wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Incorrect, - 10", Toast.LENGTH_SHORT).show()
+
             }
         }
     }
@@ -152,7 +164,7 @@ class GridFragment: Fragment() {
         try {
             context.assets.open(fileName).bufferedReader().useLines { lines ->
                 lines.forEach { line ->
-                    words.add(line.trim()) // Add each line to the set, trimming whitespace
+                    words.add(line.trim().lowercase())
                 }
             }
         } catch (e: IOException) {
@@ -160,6 +172,37 @@ class GridFragment: Fragment() {
         }
 
         return words
+    }
+
+    fun score(word: String): Int{
+        var vowelsCount = 0
+        var consonantsCount = 0
+        val szpxq = setOf('S', 'Z', 'P', 'X', 'Q')
+        val vowels = setOf('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U')
+        var rare_exist = false
+        var final_score = 0
+
+        word.forEach { char ->
+            if (char.isLetter()) {
+                if (char in vowels) {
+                    vowelsCount++
+                } else {
+                    consonantsCount++
+                    if (char in szpxq){
+                        rare_exist = true
+                    }
+                }
+            }
+        }
+
+        if (vowelsCount + consonantsCount < 4 || vowelsCount < 2){
+            return - 10
+        }
+        final_score += consonantsCount + 5 * vowelsCount
+        if (rare_exist){
+            final_score *= 2
+        }
+        return final_score
     }
 
 

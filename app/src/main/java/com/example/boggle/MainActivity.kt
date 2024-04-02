@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() , GridInteractionListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //newGrid()
-
     }
 
     override fun onStartNewGame() {
