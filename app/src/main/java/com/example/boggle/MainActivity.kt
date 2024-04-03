@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() ,TabletFragment.NewGameStarter, GridFra
     }
 
     override fun newGame() {
-        TODO("Not yet implemented")
+        val fragmentGrid = supportFragmentManager.findFragmentById(R.id.fragmentContainerTop) as GridFragment?
+        fragmentGrid?.initialize()
     }
 
 }

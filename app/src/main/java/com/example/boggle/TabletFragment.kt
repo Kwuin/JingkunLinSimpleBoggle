@@ -26,6 +26,14 @@ class TabletFragment: Fragment()  {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.infoTextView.text = "Score :"
+        binding.startNewButton.setOnClickListener {
+            startNew()
+        }
+    }
+
     interface NewGameStarter {
         fun newGame() // Assuming the variable you need is a String
     }
@@ -34,9 +42,10 @@ class TabletFragment: Fragment()  {
 
     // Existing onAttach and other methods...
 
-//    private fun startNew() {
-//        starter?.startNewGame()
-//    }
+    private fun startNew() {
+        starter?.newGame()
+        binding.infoTextView.text = "Score : 0"
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

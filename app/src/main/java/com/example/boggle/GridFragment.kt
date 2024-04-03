@@ -34,11 +34,11 @@ class GridFragment: Fragment() {
             "Cannot access binding because it is null. Is the view visible?"
         }
 
-    private val clickedPositions = mutableListOf<Pair<Int, Int>>()
-    private val clickedLetters = mutableListOf<String>()
+    private var clickedPositions = mutableListOf<Pair<Int, Int>>()
+    private var clickedLetters = mutableListOf<String>()
     private var current_score = 0
     private var submitted_words = mutableSetOf<String>()
-    val clickedButtonIds = mutableListOf<Int>()
+    private var clickedButtonIds = mutableListOf<Int>()
     private lateinit var gridLayout: GridLayout
 
 
@@ -84,8 +84,17 @@ class GridFragment: Fragment() {
         initialize()
     }
 
-    private fun initialize(){
+    fun initialize(){
+        clickedPositions.clear()
+        clickedLetters.clear()
+        current_score = 0
+        submitted_words.clear()
+        clickedButtonIds.clear()
+
         gridLayout = binding.buttonsGrid
+
+        gridLayout.removeAllViews()
+        binding.letterView.text = ""
         //dictionaryWords = readDictionaryFile()
         val alphabet = ('A'..'Z').toList()
 
