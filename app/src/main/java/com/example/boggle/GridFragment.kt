@@ -156,7 +156,12 @@ class GridFragment: Fragment() {
                 }
                 val gain_score = score(wordString)
                 current_score += gain_score
-                Toast.makeText(requireContext(), "Correct, you get$gain_score",  Toast.LENGTH_SHORT).show()
+                if (gain_score == -10){
+                    Toast.makeText(requireContext(), "Incorrect, you get - 10",  Toast.LENGTH_SHORT).show()
+                }else {
+                    Toast.makeText(requireContext(), "Correct, you get $gain_score",  Toast.LENGTH_SHORT).show()
+                }
+
             }else{
                 Toast.makeText(requireContext(), "Incorrect, - 10", Toast.LENGTH_SHORT).show()
                 current_score -= 10
