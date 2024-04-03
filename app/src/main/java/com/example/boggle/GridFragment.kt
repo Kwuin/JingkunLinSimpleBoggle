@@ -81,10 +81,12 @@ class GridFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initialize()
+    }
+
+    private fun initialize(){
         gridLayout = binding.buttonsGrid
-
         //dictionaryWords = readDictionaryFile()
-
         val alphabet = ('A'..'Z').toList()
 
 

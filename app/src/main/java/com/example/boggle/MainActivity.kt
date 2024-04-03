@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import kotlin.random.Random
 
 
-class MainActivity : AppCompatActivity() ,GridFragment.ScoreNotifier{
+class MainActivity : AppCompatActivity() ,TabletFragment.NewGameStarter, GridFragment.ScoreNotifier{
     private val clickedPositions = mutableListOf<Pair<Int, Int>>()
     private val clickedLetters = mutableListOf<String>()
     //private lateinit var gridLayout: GridLayout
@@ -19,15 +19,7 @@ class MainActivity : AppCompatActivity() ,GridFragment.ScoreNotifier{
         //newGrid()
     }
 
-//    override fun onStartNewGame() {
-//        TODO("Not yet implemented")
-//    }
 
-
-    private fun startNewGame() {
-        clickedLetters.clear()
-        clickedPositions.clear()
-    }
 
 
     override fun notifyTablet(score: Int) {
@@ -35,8 +27,8 @@ class MainActivity : AppCompatActivity() ,GridFragment.ScoreNotifier{
         fragmentTablet?.updateScore(score)
     }
 
-//    override fun requestScoreFromGrid(): Int {
-//        TODO("Not yet implemented")
-//    }
+    override fun newGame() {
+        TODO("Not yet implemented")
+    }
 
 }

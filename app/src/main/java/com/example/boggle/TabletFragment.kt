@@ -27,13 +27,37 @@ class TabletFragment: Fragment()  {
     }
 
     interface NewGameStarter {
-        fun newGame(): Int // Assuming the variable you need is a String
+        fun newGame() // Assuming the variable you need is a String
+    }
+
+    private var starter: NewGameStarter? = null
+
+    // Existing onAttach and other methods...
+
+//    private fun startNew() {
+//        starter?.startNewGame()
+//    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        starter = if (context is NewGameStarter) {
+            context
+        } else {
+            throw RuntimeException("$context must implement VariableUpdateListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        starter = null
     }
 
 
     fun updateScore(score :  Int) {
         binding.infoTextView.text = "Score : $score"
     }
+
+
 
 
 }
