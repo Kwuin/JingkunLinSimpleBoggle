@@ -151,6 +151,12 @@ class GridFragment: Fragment() {
                 current_score -= 10
             }
             notifyScoreChanged(current_score)
+
+            binding.letterView.text = ""
+            clickedLetters.clear()
+            clickedPositions.clear()
+            clickedButtonIds.clear()
+
         }
     }
 
