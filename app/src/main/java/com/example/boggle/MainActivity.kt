@@ -19,6 +19,10 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 
+
+//reference : https://chat.openai.com/share/206a2d96-77d1-4a9d-8dc5-bcfe69f653a9
+//https://chat.openai.com/share/7d87fad4-73a4-480e-8165-5d62ed5b9448
+//https://chat.openai.com/share/e35f8bc6-b92c-4b74-971e-af7a97cd5efa
 class MainActivity : AppCompatActivity() ,TabletFragment.NewGameStarter, GridFragment.ScoreNotifier{
     private val clickedPositions = mutableListOf<Pair<Int, Int>>()
     private val clickedLetters = mutableListOf<String>()
