@@ -1,5 +1,6 @@
 package com.example.boggle
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,5 +25,15 @@ class TabletFragment: Fragment()  {
             FragmentTabletBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    interface NewGameStarter {
+        fun newGame(): Int // Assuming the variable you need is a String
+    }
+
+
+    fun updateScore(score :  Int) {
+        binding.infoTextView.text = "Score : $score"
+    }
+
 
 }

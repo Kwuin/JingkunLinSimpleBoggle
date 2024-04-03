@@ -44,7 +44,31 @@ class GridFragment: Fragment() {
 
     private lateinit var dictionaryWords: Set<String>
 
+    interface ScoreNotifier {
+        fun notifyTablet(score : Int) // Assuming the variable you need is a String
+    }
 
+    private var notifier: ScoreNotifier? = null
+
+    // Existing onAttach and other methods...
+
+    private fun notifyScoreChanged(newValue: Int) {
+        notifier?.notifyTablet(newValue)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        notifier = if (context is ScoreNotifier) {
+            context
+        } else {
+            throw RuntimeException("$context must implement VariableUpdateListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        notifier = null
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -124,10 +148,16 @@ class GridFragment: Fragment() {
                 Toast.makeText(requireContext(), "Correct, you get$gain_score",  Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(requireContext(), "Incorrect, - 10", Toast.LENGTH_SHORT).show()
-
+                current_score -= 10
             }
+            notifyScoreChanged(current_score)
         }
     }
+
+
+//    private fun notifyScoreChange(newValue: Int) {
+//        (activity as? MainActivity)?.scoreChange(newValue)
+//    }
 
 
     private fun isAdjacent(position: Pair<Int, Int>): Boolean {
